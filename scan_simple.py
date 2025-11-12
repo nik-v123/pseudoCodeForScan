@@ -9,6 +9,8 @@ from astropy.coordinates import get_body_barycentric, get_body
 
 import turtle
 
+fpath = "C:\\Users\\nikos\\Desktop\\scan_log.txt"
+
 # !!! constant coordinate format (alt,az) with np arrays !!!
 
 # initializing tables
@@ -119,7 +121,7 @@ def main():
     # starting scan
     # SPEED = MAXIMUM
 
-    f=open("C:\\Users\\nikos\\Desktop\\scan_log.txt","w")
+    f=open(fpath,"w")
     f.write("-----------------START OF LOG-----------------\n")
 
     turtle.color("blue")
@@ -133,46 +135,17 @@ def main():
 
         for j in range(az_count):
 
-            '''
-            f.write(f"d_coords_total={d_coords_total}")
-            f.write("   ")
-            '''
-            
             # Each time the coordinates will be incremented by d_coords_movement and by d_coords_scan
 
             moveRtAltAz(np.array([0,multiplier*d_az]))
 
             theoretical_coords[1] = theoretical_coords[1] + multiplier*d_az # based on the coords of the initial point, that was found with the IMU
 
-            '''
-            f.write(f"theoretical_coords={theoretical_coords}")
-            f.write("   ")
-            '''
-
             signal_strength = getSdrSignalStrength()
-
-            '''
-            f.write(f"signal_strength={signal_strength}")
-            f.write("   ")
-            '''
 
             t = Time(datetime.now(timezone.utc))
 
             t_matrix = np.array([t], dtype=object)
-
-            '''
-            f.write(f"t={t}")
-            f.write("   ")
-
-            f.write(f"t_matrix={t_matrix}")
-            f.write("   ")
-
-            f.write(f"t_c_0={theoretical_coords[0]}")
-            f.write("   ")
-
-            f.write(f"t_c_1={theoretical_coords[1]}")
-            f.write("   ")
-            '''
 
             matrix_to_append = np.array([np.array([theoretical_coords[0]]),np.array([theoretical_coords[1]]),signal_strength,t_matrix])
 
